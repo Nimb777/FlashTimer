@@ -1,0 +1,30 @@
+﻿name: Compile examples
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Arduino CLI
+        uses: arduino/setup-arduino@v1
+        with:
+          arduino-cli-version: '1.8.5'
+
+      - name: Update core index
+        run: arduino-cli core update-index
+
+      - name: Install esp8266 core
+        run: arduino-cli core install esp8266:esp8266
+
+      - name: Install esp32 core
+        run: arduino-cli core install esp32:esp32
+
+      - name: Compile FlashTimer example for NodeMCU (esp8266)
+        run: arduino-cli compile --fqbn esp8266:esp8266:nodemcuv2 FlashTimer/examples/NodeMCUExample.ino
+
+      - name: Compile FlashTimer example for ESP32
+        run: arduino-cli compile --fqbn esp32:esp32:esp32 FlashTimer/examples/FlashTimer.ino
