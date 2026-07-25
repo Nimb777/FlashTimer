@@ -7,7 +7,7 @@
 /**
  * Click types reported by the library.
  */
-enum CLICKTYPE { NONE, SINGLE, DOUBLE, LONG };
+enum class ClickType : uint8_t { NONE, SINGLE, DOUBLE, LONG };
 
 /**
  * Internal button-state machine states:
@@ -15,7 +15,7 @@ enum CLICKTYPE { NONE, SINGLE, DOUBLE, LONG };
  *  P - pressed (measuring press duration)
  *  W - wait (after release; waiting for possible double-click)
  */
-enum BUTTONSTATUS { I, P, W };
+enum class ButtonStatus : uint8_t { I, P, W };
 
 /**
  * FlashTimer
@@ -43,7 +43,7 @@ public:
     void update();
 
     /** Return the last detected click type (NONE, SINGLE, DOUBLE, LONG). */
-    CLICKTYPE getLastClick() const;
+    ClickType getLastClick() const;
 
     /**
      * Retrieve timing diagnostics:
@@ -97,8 +97,8 @@ private:
     unsigned long m_timer1;
     unsigned long m_timer2;
 
-    BUTTONSTATUS m_currentState;
-    CLICKTYPE lastClick;
+    ButtonStatus m_currentState;
+    ClickType lastClick;
 };
 
 #endif // FLASH_TIMER_H

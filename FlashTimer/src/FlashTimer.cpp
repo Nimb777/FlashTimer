@@ -3,7 +3,7 @@
 FlashTimer::FlashTimer(int pin, unsigned long longDelay, unsigned long doubleDelay)
     : m_buttonPin(pin), m_longDelay(longDelay), m_doubleDelay(doubleDelay), m_buttonState(true), m_lastButtonState(true),
       m_singleClicks(0), m_doubleClicks(0), m_longClicks(0), m_index(0), m_pos(0), m_highTimer(0), m_lowTimer(0), 
-      m_offTimer(0), m_timer(0), m_timer0(0), m_timer1(0), m_timer2(0), m_currentState(I), lastClick(NONE) {
+      m_offTimer(0), m_timer(0), m_timer0(0), m_timer1(0), m_timer2(0), m_currentState(ButtonStatus::I), lastClick(ClickType::NONE) {
     pinMode(m_buttonPin, INPUT_PULLUP);
 }
 
@@ -13,12 +13,12 @@ void FlashTimer::update() {
     m_timer = millis();
 
     switch (m_currentState) {
-    case I:
+        case ButtonStatus::I:
         m_pos = 0;
         if (m_buttonState == LOW && m_lastButtonState == HIGH) {
             m_timer0 = m_timer;
             m_offTimer = m_timer - m_timer2;
-            m_currentState = P;
+            m_currentState = ButtonStatus::P;
         }
         break;
 
@@ -33,11 +33,11 @@ void FlashTimer::update() {
 
             if (m_lowTimer >= m_longDelay) {
                 m_longClicks++;
-                lastClick = LONG;
+                lastClick = ClickType::LONG;
                 m_timer2 = m_timer;
-                m_currentState = I;
+                m_currentState = ButtonStatus::I;
             } else {
-                m_currentState = W;
+                m_currentState = ButtonStatus::W;
             }
         }
         break;
@@ -50,7 +50,7 @@ void FlashTimer::update() {
             if (m_highTimer <= m_doubleDelay) {
                 m_pos = 4;
                 m_doubleClicks++;
-                lastClick = DOUBLE;
+                lastClick = ClickType::DOUBLE;
                 m_timer2 = m_timer;
             } else {
                 m_pos = 6;
@@ -65,12 +65,12 @@ void FlashTimer::update() {
                 // is not lost. This preserves correct behavior while keeping the
                 // double-click-first check intact.
                 m_singleClicks++;
-                lastClick = SINGLE;
+                lastClick = ClickType::SINGLE;
                 m_singleClicks++;
-                lastClick = SINGLE;
+                lastClick = ClickType::SINGLE;
             }
 
-            m_currentState = I;
+            m_currentState = ButtonStatus::I;
         } else if (m_buttonState == HIGH && m_timer - m_timer1 > m_doubleDelay) {
             m_pos = 5;
             // Timeout expired without a second press — count a single click once.
@@ -78,9 +78,9 @@ void FlashTimer::update() {
             // double-increment is necessary here because there's no competing
             // double-click detection in progress.
             m_singleClicks++;
-            lastClick = SINGLE;
+            lastClick = ClickType::SINGLE;
             m_timer2 = m_timer;
-            m_currentState = I;
+            m_currentState = ButtonStatus::I;
         }
         break;
     }
@@ -88,7 +88,7 @@ void FlashTimer::update() {
     m_lastButtonState = m_buttonState;
 }
 
-CLICKTYPE FlashTimer::getLastClick() const {
+ClickType FlashTimer::getLastClick() const {
     return lastClick;
 }
 

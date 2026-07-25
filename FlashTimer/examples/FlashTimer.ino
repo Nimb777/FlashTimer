@@ -20,13 +20,13 @@ void loop() {
   Serial.print(flashTimer.getLongClicks());
   Serial.print(" C:");
   switch (flashTimer.getLastClick()) {
-    case SINGLE:
+    case ClickType::SINGLE:
       Serial.print("S");
       break;
-    case DOUBLE:
+    case ClickType::DOUBLE:
       Serial.print("D");
       break;
-    case LONG:
+    case ClickType::LONG:
       Serial.print("L");
       break;
     default:
