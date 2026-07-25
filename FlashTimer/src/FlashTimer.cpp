@@ -22,7 +22,7 @@ void FlashTimer::update() {
         }
         break;
 
-    case P:
+    case ButtonStatus::P:
         m_pos = 1;
         if ((m_timer - m_timer0) >= m_longDelay) {
             m_pos = 2;
@@ -42,7 +42,7 @@ void FlashTimer::update() {
         }
         break;
 
-    case W:
+    case ButtonStatus::W:
         m_pos = 3;
         if (m_buttonState == LOW && m_lastButtonState == HIGH) {
             m_highTimer = m_timer - m_timer1;
