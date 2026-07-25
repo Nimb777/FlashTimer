@@ -11,7 +11,10 @@ jobs:
 
       - name: Install Arduino CLI
         run: |
-          curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | sh -s -- -b /usr/local/bin 1.5.1
+          # Download and extract the latest Linux x86_64 arduino-cli binary
+          curl -fsSL -o /tmp/arduino-cli.tar.gz https://downloads.arduino.cc/arduino-cli/arduino-cli_latest_Linux_64bit.tar.gz
+          sudo tar -xzf /tmp/arduino-cli.tar.gz -C /usr/local/bin --strip-components=1
+          arduino-cli version || true
 
       - name: Update core index
         run: arduino-cli core update-index
