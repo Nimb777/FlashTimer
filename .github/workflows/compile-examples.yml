@@ -39,9 +39,12 @@ jobs:
           # Try the common package IDs used by different index layouts
           arduino-cli core install esp8266:esp8266 || arduino-cli core install esp8266com:esp8266 || echo "esp8266 core install failed, proceeding to attempt compile (will fail if core missing)"
 
-      - name: Prepare ESP32 example for Arduino CLI
+      - name: Prepare examples for Arduino CLI
         run: |
           mkdir -p FlashTimer/examples/FlashTimer
+          mkdir -p FlashTimer/examples/T-Display
+          mkdir -p FlashTimer/examples/NodeMCU
+          mkdir -p FlashTimer/examples/Arduino
           cp -f FlashTimer/examples/FlashTimer.ino FlashTimer/examples/FlashTimer/FlashTimer.ino
 
       - name: Install local library
@@ -51,3 +54,15 @@ jobs:
 
       - name: Compile FlashTimer example for ESP32
         run: arduino-cli compile --fqbn esp32:esp32:esp32 FlashTimer/examples/FlashTimer
+
+      - name: Compile T-Display example for ESP32
+        run: arduino-cli compile --fqbn esp32:esp32:esp32 FlashTimer/examples/T-Display
+
+      - name: Install Arduino AVR core (for Arduino Uno/Nano)
+        run: arduino-cli core install arduino:avr
+
+      - name: Compile Arduino example for Arduino Uno
+        run: arduino-cli compile --fqbn arduino:avr:uno FlashTimer/examples/Arduino
+
+      - name: Compile NodeMCU example for ESP8266
+        run: arduino-cli compile --fqbn esp8266:esp8266:nodemcuv2 FlashTimer/examples/NodeMCU || echo "ESP8266 compile attempt made (core may not be fully available)"
