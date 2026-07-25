@@ -77,27 +77,27 @@ public:
     unsigned long getTimer() const;
 
 private:
-    const int buttonPin;
-    const unsigned long LONG_DELAY;
-    const unsigned long DOUBLE_DELAY;
+    const int m_buttonPin;
+    const unsigned long m_longDelay;
+    const unsigned long m_doubleDelay;
 
-    bool BUTTONSTATE;
-    bool LASTBUTTONSTATE;
-    int SINGLE_CLICK;
-    int DOUBLE_CLICK;
-    int LONG_CLICK;
-    int INDEX;
-    int POS;
+    bool m_buttonState;
+    bool m_lastButtonState;
+    int m_singleClicks;
+    int m_doubleClicks;
+    int m_longClicks;
+    int m_index;
+    int m_pos;
 
-    unsigned long HIGH_TIMER;
-    unsigned long LOW_TIMER;
-    unsigned long OFF_TIMER;
-    unsigned long TIMER;
-    unsigned long TIMER0;
-    unsigned long TIMER1;
-    unsigned long TIMER2;
+    unsigned long m_highTimer;
+    unsigned long m_lowTimer;
+    unsigned long m_offTimer;
+    unsigned long m_timer;
+    unsigned long m_timer0;
+    unsigned long m_timer1;
+    unsigned long m_timer2;
 
-    BUTTONSTATUS CURRENTSTATE;
+    BUTTONSTATUS m_currentState;
     CLICKTYPE lastClick;
 };
 
