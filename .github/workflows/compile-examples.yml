@@ -9,10 +9,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup Arduino CLI
-        uses: arduino/setup-arduino@v1
-        with:
-          arduino-cli-version: '1.8.5'
+      - name: Install Arduino CLI
+        run: |
+          curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | sh -s -- -b /usr/local/bin 1.8.5
 
       - name: Update core index
         run: arduino-cli core update-index
