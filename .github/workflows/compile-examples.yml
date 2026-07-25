@@ -36,20 +36,15 @@ jobs:
       - name: Install esp32 core
         run: arduino-cli core install esp32:esp32
 
-      - name: Prepare examples for Arduino CLI
+      - name: Prepare ESP32 example for Arduino CLI
         run: |
-          mkdir -p FlashTimer/examples/NodeMCUExample
           mkdir -p FlashTimer/examples/FlashTimer
-          cp -f FlashTimer/examples/NodeMCUExample.ino FlashTimer/examples/NodeMCUExample/NodeMCUExample.ino
           cp -f FlashTimer/examples/FlashTimer.ino FlashTimer/examples/FlashTimer/FlashTimer.ino
 
       - name: Install local library
         run: |
           mkdir -p "$HOME/Arduino/libraries"
           cp -R FlashTimer "$HOME/Arduino/libraries/FlashTimer"
-
-      - name: Compile FlashTimer example for NodeMCU (esp8266)
-        run: arduino-cli compile --fqbn esp8266:esp8266:nodemcuv2 FlashTimer/examples/NodeMCUExample
 
       - name: Compile FlashTimer example for ESP32
         run: arduino-cli compile --fqbn esp32:esp32:esp32 FlashTimer/examples/FlashTimer
