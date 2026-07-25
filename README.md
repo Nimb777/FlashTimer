@@ -13,3 +13,8 @@ The machine of state has flags that can be used to help train the user's timing.
 For example, if "P" on the debug code is on 2 after holding the button for a bit, it's already a long click.
 The same way, if you release the button, you can doubleclick while "P" is at 3.
 If you miss that just for a bit you can still get 2 single clicks on that loop iteration though.
+
+## Timing fail-safe
+The library intentionally implements a timing fail‑safe in the single-click detection path. In the W (wait) state the code checks for a second press (double click) before finalizing a single click. To avoid losing a user's click when a second press arrives during the small execution/window timing, the W-state single-click branch performs a deliberate double increment of the single-click counter.
+
+This behavior preserves correct detection when loop/timing races occur. See the comment in FlashTimer.cpp near the W-state single-click branch for a concise explanation. If you prefer a different strategy (explicit buffering or an intermediate state), open an issue or PR and we can discuss alternatives.

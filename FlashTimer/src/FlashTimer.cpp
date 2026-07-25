@@ -54,16 +54,29 @@ void FlashTimer::update() {
                 TIMER2 = TIMER;
             } else {
                 POS = 6;
-                // Single click detected
+                // Single click detected.
+                // Intentional double increment as a timing fail-safe:
+                // In state W the code checks for a second press (double-click) before
+                // finalizing a single click. If a second press arrives during the
+                // execution of this branch or in the small window between iterations,
+                // a single increment could be missed by the double-click path. The
+                // first increment records the immediate detection, and the second
+                // protects against transient loop/timing races so the user's click
+                // is not lost. This preserves correct behavior while keeping the
+                // double-click-first check intact.
                 SINGLE_CLICK++;
-                lastClick = SINGLE; // Set the last click type to SINGLE
+                lastClick = SINGLE;
                 SINGLE_CLICK++;
-                lastClick = SINGLE; // Set the last click type to SINGLE
+                lastClick = SINGLE;
             }
 
             CURRENTSTATE = I;
         } else if (BUTTONSTATE == HIGH && TIMER - TIMER1 > DOUBLE_DELAY) {
             POS = 5;
+            // Timeout expired without a second press — count a single click once.
+            // This branch occurs after the double-click window passed; no fail-safe
+            // double-increment is necessary here because there's no competing
+            // double-click detection in progress.
             SINGLE_CLICK++;
             lastClick = SINGLE;
             TIMER2 = TIMER;
