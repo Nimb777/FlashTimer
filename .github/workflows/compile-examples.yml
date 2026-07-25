@@ -13,7 +13,17 @@ jobs:
         run: |
           # Download and extract the latest Linux x86_64 arduino-cli binary
           curl -fsSL -o /tmp/arduino-cli.tar.gz https://downloads.arduino.cc/arduino-cli/arduino-cli_latest_Linux_64bit.tar.gz
-          sudo tar -xzf /tmp/arduino-cli.tar.gz -C /usr/local/bin --strip-components=1
+          mkdir -p /tmp/arduino-cli-extract
+          tar -xzf /tmp/arduino-cli.tar.gz -C /tmp/arduino-cli-extract
+          # Move the binary to /usr/local/bin and make executable. Archive layout may vary.
+          if [ -f /tmp/arduino-cli-extract/arduino-cli ]; then
+            sudo mv /tmp/arduino-cli-extract/arduino-cli /usr/local/bin/arduino-cli
+          else
+            # find binary inside extracted subfolder
+            BINPATH=$(find /tmp/arduino-cli-extract -type f -name arduino-cli -print -quit)
+            sudo mv "$BINPATH" /usr/local/bin/arduino-cli
+          fi
+          sudo chmod +x /usr/local/bin/arduino-cli
           arduino-cli version || true
 
       - name: Update core index
