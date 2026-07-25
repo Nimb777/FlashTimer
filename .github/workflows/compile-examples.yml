@@ -33,6 +33,12 @@ jobs:
       - name: Install esp32 core
         run: arduino-cli core install esp32:esp32
 
+      - name: Install esp8266 core (try common IDs)
+        run: |
+          set -e
+          # Try the common package IDs used by different index layouts
+          arduino-cli core install esp8266:esp8266 || arduino-cli core install esp8266com:esp8266 || echo "esp8266 core install failed, proceeding to attempt compile (will fail if core missing)"
+
       - name: Prepare ESP32 example for Arduino CLI
         run: |
           mkdir -p FlashTimer/examples/FlashTimer
